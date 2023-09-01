@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { cloneElement, createContext, useContext, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect } from "react";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 
@@ -54,42 +53,13 @@ const Button = styled.button`
   }
 `;
 
-const ModalContext = createContext();
-
-function Modal({ children }) {
-  // Press Esc, modal is closed
-  useEffect(() => {
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        close();
-      }
-    });
-  });
-
-  const [openName, setOpenName] = useState('');
-
-  const close = () => setOpenName('');
-
-  const open = setOpenName;
-  return <ModalContext.Provider value={{ openName, close, open }}>
-    {children}
-  </ModalContext.Provider>;
-}
-
-function Open({ children, opens: opensWindowName }) {
-  const { open } = useContext(ModalContext);
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
-}
-
-function Window({ children, name }) {
-  const { openName, close } = useContext(ModalContext);
-  if (name !== openName) return null;
+function Modal({ children, onClose }) {
 
   return (
     <div>
       <Overlay>
         <StyledModal>
-          <Button onClick={close}>
+          <Button onClick={onClose}>
             <HiXMark />
           </Button>
 
@@ -101,8 +71,5 @@ function Window({ children, name }) {
     </div>
   );
 }
-
-Modal.Open = Open;
-Modal.Window = Window;
 
 export default Modal;

@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import styled from "styled-components";
 import { HiPencil, HiTrash } from 'react-icons/hi2';
-import { formatCurrency } from "../../utils/helpers";
+import styled from "styled-components";
+
+import EditCabinForm from "./EditCabinForm";
 
 import { useState } from "react";
-import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
-import { useEditCabin } from "./useEditCabin";
+import { formatCurrency } from "../../utils/helpers";
 
 const TableRow = styled.div`
   display: grid;
@@ -64,7 +64,7 @@ function CabinRow({ cabin }) {
   return (
     <>
       <TableRow>
-        <Img src={'http://localhost:8080.com/' + '/' + imageUrl} />
+        <Img src={imageUrl} alt={name} />
         <Cabin>{name}</Cabin>
         <div>Fits up to {maxCapacity} guests</div>
         <Price>{formatCurrency(regularPrice)}</Price>
@@ -78,7 +78,7 @@ function CabinRow({ cabin }) {
           <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}><HiTrash /></button>
         </div>
       </TableRow>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} type="Edit Cabin" />}
+      {showForm && <EditCabinForm cabin={cabin} type="Edit Cabin" />}
     </>
   );
 }
