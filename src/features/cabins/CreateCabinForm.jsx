@@ -21,7 +21,8 @@ function CreateCabinForm({ onCloseModal }) {
   const { createCabin, isCreating } = useCreateCabin();
 
   const addBtn = useRef(); // Ref to the form element
-  //Enter is pressed
+
+  //Handle when Enter, form is summited
   document.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       e.preventDefault(); // Prevent the default form submission
@@ -29,12 +30,9 @@ function CreateCabinForm({ onCloseModal }) {
       addBtn.current.click();
     }
   });
-  // Handle Enter key press
-
 
   // Handle submit
   function onSubmit(newCabin) {
-
     const formData = new FormData();
     Object.entries(newCabin).forEach(([key, value]) => {
       formData.append(key, value);
@@ -50,14 +48,12 @@ function CreateCabinForm({ onCloseModal }) {
 
 
   function onError(errors) {
-    console.log('errors', errors);
-    // console.log(errors);
   }
 
   return (
     <Form
       onSubmit={handleSubmit(onSubmit, onError)}
-      type={onCloseModal ? "modal" : "regular"}
+      type={onCloseModal ? "regular" : "modal"}
     >
       <FormRow
         label="Cabin name"

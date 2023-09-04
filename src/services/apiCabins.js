@@ -1,7 +1,13 @@
 import { clientAxios } from "./clientAxios";
 
 export async function getCabins() {
-  const { data, error } = await clientAxios.get("/cabins");
+  const { data, error } = await clientAxios.get("/cabins", {
+    params: {
+      pageNo: 1,
+      pageSize: 10
+    }
+
+  });
 
   if (error) {
     throw new Error("Cabins could not be loaded!");
