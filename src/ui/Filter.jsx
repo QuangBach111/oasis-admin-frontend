@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
+import { useBooking } from "../features/bookings/useBooking";
 
 const StyledFilter = styled.div`
   border: 1px solid var(--color-grey-100);
@@ -39,6 +41,7 @@ const FilterButton = styled.button`
 function Filter({ filterField, options }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentFilter = searchParams.get(filterField) || options[0].value;
+
   function handleClick(value) {
     searchParams.set(filterField, value);
     setSearchParams(searchParams);
@@ -52,7 +55,6 @@ function Filter({ filterField, options }) {
           onClick={() => handleClick(option.value)}
           active={option.value === currentFilter}
           disabled={option.value === currentFilter}
-
         >
           {option.label}
         </FilterButton>

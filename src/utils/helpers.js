@@ -5,12 +5,12 @@ import { differenceInDays } from 'date-fns/esm';
 export const subtractDates = (dateStr1, dateStr2) =>
   differenceInDays(parseISO(String(dateStr1)), parseISO(String(dateStr2)));
 
-export const formatDistanceFromNow = (dateStr) =>
-  formatDistance(parseISO(dateStr), new Date(), {
+export const formatDistanceFromNow = (date) =>
+  formatDistance(date, new Date(), {
     addSuffix: true,
-  })
-    .replace('about ', '')
-    .replace('in', 'In');
+  });
+// .replace('about ', '')
+// .replace('in', 'In');
 
 // Supabase needs an ISO date string. However, that string will be different on every render because the MS or SEC have changed, which isn't good. So we use this trick to remove any time
 export const getToday = function (options = {}) {
@@ -28,3 +28,6 @@ export const formatCurrency = (value) =>
   new Intl.NumberFormat('en', { style: 'currency', currency: 'USD' }).format(
     value
   );
+
+export const createDate = (dateArr) =>
+  new Date(dateArr.at(0), dateArr.at(1) - 1, dateArr.at(2), dateArr?.at(3), dateArr?.at(4), dateArr?.at(5));

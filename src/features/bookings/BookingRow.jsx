@@ -1,10 +1,12 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 
 import Tag from "../../ui/Tag";
 import Table from "../../ui/Table";
 
-import { formatCurrency } from "../../utils/helpers";
+import { formatCurrency, createDate } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 
 const Cabin = styled.div`
@@ -37,23 +39,23 @@ const Amount = styled.div`
 function BookingRow({
   booking: {
     id: bookingId,
-    created_at,
+    createdAt,
     startDate,
     endDate,
     numNights,
     numGuests,
     totalPrice,
     status,
-    guests: { fullName: guestName, email },
-    cabins: { name: cabinName },
+    guest: { fullName: guestName, email },
+    cabin: { name: cabinName },
   },
 }) {
   const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
+    UNCONFIRMED: "blue",
+    CHECKIN: "green",
+    CHECKOUT: "silver",
   };
-
+  console.log(cabinName);
   return (
     <Table.Row>
       <Cabin>{cabinName}</Cabin>
@@ -65,21 +67,23 @@ function BookingRow({
 
       <Stacked>
         <span>
-          {isToday(new Date(startDate))
+          {isToday(createDate(startDate))
             ? "Today"
-            : formatDistanceFromNow(startDate)}{" "}
+            : formatDistanceFromNow(createDate(startDate))}{" "}
           &rarr; {numNights} night stay
         </span>
         <span>
-          {format(new Date(startDate), "MMM dd yyyy")} &mdash;{" "}
-          {format(new Date(endDate), "MMM dd yyyy")}
+          {format(createDate(startDate), "MMM dd yyyy")} &mdash;{" "}
+          {format(createDate(endDate), "MMM dd yyyy")}
         </span>
-      </Stacked>
+        {/* <span>{format(createDate(startDate), "MMM dd yyyy")}</span> */}
+        {/* <span>{`${createDate(startDate).getMonth()}`}</span> */}
+      </Stacked >
 
-      <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+      <Tag type={statusToTagName[status]}> {status}</Tag >
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
-    </Table.Row>
+    </Table.Row >
   );
 }
 
