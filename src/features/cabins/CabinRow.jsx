@@ -1,25 +1,19 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import styled from "styled-components";
 import { HiPencil, HiTrash } from 'react-icons/hi2';
-import { formatCurrency } from "../../utils/helpers";
 
-import { useState } from "react";
-import CreateCabinForm from "./CreateCabinForm";
+import styled from "styled-components";
+
+import EditCabinForm from "./EditCabinForm";
+import Modal from '../../ui/Modal';
+import ConfirmDelete from '../../ui/ConfirmDelete';
+import Table from "../../ui/Table";
+
 import { useDeleteCabin } from "./useDeleteCabin";
-import { useEditCabin } from "./useEditCabin";
-
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+import { formatCurrency } from "../../utils/helpers";
+import { deleteCabin } from "../../services/apiCabins";
+import Menus from '../../ui/Menus';
 
 const Img = styled.img`
   display: block;
@@ -50,7 +44,6 @@ const Discount = styled.div`
 
 
 function CabinRow({ cabin }) {
-  const [showForm, setShowForm] = useState(false);
   const {
     id: cabinId,
     name,
@@ -62,24 +55,48 @@ function CabinRow({ cabin }) {
   const { isDeleting, deleteCabin } = useDeleteCabin();
 
   return (
-    <>
-      <TableRow>
-        <Img src={'http://localhost:8080.com/' + '/' + imageUrl} />
-        <Cabin>{name}</Cabin>
-        <div>Fits up to {maxCapacity} guests</div>
-        <Price>{formatCurrency(regularPrice)}</Price>
-        {discount ? (
-          <Discount>{formatCurrency(discount)}</Discount>
-        ) : (
-          <span>&mdash;</span>
-        )}
-        <div>
-          <button onClick={() => setShowForm(!showForm)}><HiPencil /></button>
-          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}><HiTrash /></button>
-        </div>
-      </TableRow>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} type="Edit Cabin" />}
-    </>
+    <Table.Row>
+      <Img src={imageUrl} alt={name} />
+      <Cabin>{name}</Cabin>
+      <div>Fits up to {maxCapacity} guests</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      {discount ? (
+        <Discount>{formatCurrency(discount)}</Discount>
+      ) : (
+        <span>&mdash;</span>
+      )}
+      <div>
+
+        <Modal>
+          <Menus.Menu>
+            <Menus.Toggle id={cabinId} />
+
+            <Menus.List id={cabinId}>
+              <Modal.Open opens="edit cabin">
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              </Modal.Open>
+              <Modal.Open opens="delete cabin">
+                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+              </Modal.Open>
+            </Menus.List>
+
+            <Modal.Window name={"edit cabin"}>
+              <EditCabinForm cabin={cabin} />
+            </Modal.Window>
+
+            <Modal.Window name={"delete cabin"}>
+              <ConfirmDelete
+                resourceName={`Cabin ${name}`}
+                disabled={isDeleting}
+                onConfirm={() => deleteCabin(cabinId)}
+              />
+            </Modal.Window>
+
+          </Menus.Menu>
+        </Modal>
+      </div>
+
+    </Table.Row>
   );
 }
 

@@ -1,3 +1,8 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import { cloneElement, createContext, useContext, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 
 const StyledModal = styled.div`
@@ -48,3 +53,69 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+const ModalContext = createContext();
+
+function Modal({ children }) {
+  // Press Esc, modal is closed
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        close();
+      }
+    });
+  });
+
+  const [openName, setOpenName] = useState('');
+
+  const close = () => setOpenName('');
+
+  const open = setOpenName;
+  return <ModalContext.Provider value={{ openName, close, open }}>
+    {children}
+  </ModalContext.Provider>;
+}
+
+function Open({ children, opens: opensWindowName }) {
+  const { open } = useContext(ModalContext);
+  return cloneElement(children, { onClick: () => open(opensWindowName) });
+}
+
+function Window({ children, name }) {
+  const { openName, close } = useContext(ModalContext);
+
+  const ref = useRef();
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    // return () => document.removeEventListener("click", handleClickOutside);
+  });
+
+  function handleClickOutside(e) {
+    if (ref.current && !ref.current.contains(e.target)) {
+      close();
+    }
+  }
+
+  if (name !== openName) return null;
+
+  return (
+    <div>
+      <Overlay>
+        <StyledModal ref={ref}>
+          <Button onClick={close}>
+            <HiXMark />
+          </Button>
+          <div>
+            {cloneElement(children, { onCloseModal: close })}
+          </div>
+        </StyledModal>
+      </Overlay >
+    </div>
+  );
+}
+
+Modal.Open = Open;
+Modal.Window = Window;
+
+export default Modal;

@@ -1,7 +1,13 @@
 import { clientAxios } from "./clientAxios";
 
 export async function getCabins() {
-  const { data, error } = await clientAxios.get("/cabins");
+  const { data, error } = await clientAxios.get("/cabins", {
+    params: {
+      pageNo: 1,
+      pageSize: 10
+    }
+
+  });
 
   if (error) {
     throw new Error("Cabins could not be loaded!");
@@ -19,7 +25,7 @@ export async function deleteCabin(cabinId) {
   return data;
 }
 export async function createCabin(newCabin) {
-  console.log('newCabin', newCabin);
+  // console.log('newCabin', newCabin);
 
   const { data } = await clientAxios.post(
     "/cabins", newCabin
@@ -28,7 +34,9 @@ export async function createCabin(newCabin) {
 }
 
 export async function editCabin(newCabin) {
-  const { data } = await clientAxios.put(
+  console.log('newCabin', newCabin);
+
+  const { data } = await clientAxios.post(
     "/cabins", newCabin
   );
   return data;

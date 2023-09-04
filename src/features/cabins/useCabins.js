@@ -3,7 +3,7 @@ import { getCabins } from "../../services/apiCabins";
 
 export function useCabins() {
   const {
-    data: cabins,
+    data,
     isLoading,
     error
   }
@@ -12,5 +12,6 @@ export function useCabins() {
       queryFn: getCabins,
     });
 
-  return { cabins, isLoading, error };
+
+  return { data, isLoading, error };
 }

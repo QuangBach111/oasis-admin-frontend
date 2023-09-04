@@ -10,26 +10,16 @@ import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
 import { useCreateCabin } from "./useCreateCabin";
-import { useRef } from "react";
+import { useEditCabin } from "./useEditCabin";
 
-function CreateCabinForm({ onCloseModal }) {
+function EditCabinForm({ cabin, onCloseModal }) {
+  const { editCabin, isEditing } = useEditCabin();
 
-  const { register, handleSubmit, getValues, formState } = useForm();
+  const { register, handleSubmit, getValues, formState } = useForm({
+    defaultValues: cabin,
+  });
 
   const { errors } = formState;
-
-  const { createCabin, isCreating } = useCreateCabin();
-
-  const addBtn = useRef(); // Ref to the form element
-
-  //Handle when Enter, form is summited
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault(); // Prevent the default form submission
-
-      addBtn.current.click();
-    }
-  });
 
   // Handle submit
   function onSubmit(newCabin) {
@@ -37,24 +27,23 @@ function CreateCabinForm({ onCloseModal }) {
     Object.entries(newCabin).forEach(([key, value]) => {
       formData.append(key, value);
     });
+
     if (newCabin.image) {
       // Append the image to FormData
       formData.append('image', newCabin.image[0]);
     }
 
-    createCabin(formData);
+    editCabin(formData);
     onCloseModal();
   }
 
-
   function onError(errors) {
+    // console.log('errors', errors);
+    // // console.log(errors);
   }
 
   return (
-    <Form
-      onSubmit={handleSubmit(onSubmit, onError)}
-      type={onCloseModal ? "regular" : "modal"}
-    >
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
       <FormRow
         label="Cabin name"
         error={errors?.name?.message}
@@ -130,13 +119,13 @@ function CreateCabinForm({ onCloseModal }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset" onClick={onCloseModal}>
+        <Button variation="secondary" onClick={() => onCloseModal()}>
           Cancel
         </Button>
-        <Button ref={addBtn} disabled={isCreating} >AddCabin</Button>
+        <Button disabled={isEditing} >Edit Cabin</Button>
       </FormRow>
     </Form>
   );
 }
 
-export default CreateCabinForm;
+export default EditCabinForm;
