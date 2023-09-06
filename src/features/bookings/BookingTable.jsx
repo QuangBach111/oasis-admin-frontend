@@ -1,9 +1,26 @@
+/* eslint-disable no-unused-vars */
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
+import { useBookings } from "./useBookings";
+import Spinner from "../../ui/Spinner";
+import Empty from "../../ui/Empty";
+// import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
-  const bookings = [];
+  const { data, isLoading } = useBookings();
+  console.log('data', data);
+
+  if (isLoading) return <Spinner />;
+
+  if (!data) return <Empty resource='booking' />;
+
+  const {
+    content: bookings,
+    // totalElements,
+    // pageable: { pageNumber },
+    // totalPages
+  } = data.data;
 
   return (
     <Menus>
@@ -20,9 +37,12 @@ function BookingTable() {
         <Table.Body
           data={bookings}
           render={(booking) => (
-            <BookingRow key={booking.id} booking={booking} />
+            <BookingRow key={bookings.id} booking={booking} />
           )}
         />
+        <Table.Footer>
+          {/* <Pagination pageNo={pageNumber} totalPage={totalPages} totalElements={totalElements} /> */}
+        </Table.Footer>
       </Table>
     </Menus>
   );
