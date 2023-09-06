@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 import {
@@ -10,7 +12,7 @@ import {
 import DataItem from "../../ui/DataItem";
 import { Flag } from "../../ui/Flag";
 
-import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import { formatDistanceFromNow, formatCurrency, createDate } from "../../utils/helpers";
 
 const StyledBookingDataBox = styled.section`
   /* Box */
@@ -102,21 +104,20 @@ const Footer = styled.footer`
 `;
 
 // A purely presentational component
-function BookingDataBox({ booking }) {
+function BookingDataBox({ booking, extras }) {
   const {
-    created_at,
+    createdAt,
     startDate,
     endDate,
     numNights,
     numGuests,
-    cabinPrice,
     extrasPrice,
     totalPrice,
     hasBreakfast,
     observations,
     isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
-    cabins: { name: cabinName },
+    guest: { fullName: guestName, email, country, countryFlag, nationalID },
+    cabin: { name: cabinName, regularPrice: cabinPrice },
   } = booking;
 
   return (
@@ -130,11 +131,11 @@ function BookingDataBox({ booking }) {
         </div>
 
         <p>
-          {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(startDate))
+          {format(createDate(startDate), "EEE, MMM dd yyyy")} (
+          {isToday(createDate(startDate))
             ? "Today"
-            : formatDistanceFromNow(startDate)}
-          ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
+            : formatDistanceFromNow(createDate(startDate))}
+          ) &mdash; {format(createDate(endDate), "EEE, MMM dd yyyy")}
         </p>
       </Header>
 
@@ -165,7 +166,7 @@ function BookingDataBox({ booking }) {
 
         <Price isPaid={isPaid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
-            {formatCurrency(totalPrice)}
+            {formatCurrency(Number(totalPrice) + Number(extras))}
 
             {hasBreakfast &&
               ` (${formatCurrency(cabinPrice)} cabin + ${formatCurrency(
@@ -178,7 +179,7 @@ function BookingDataBox({ booking }) {
       </Section>
 
       <Footer>
-        <p>Booked {format(new Date(created_at), "EEE, MMM dd yyyy, p")}</p>
+        <p>Booked {format(new Date(createdAt), "EEE, MMM dd yyyy, p")}</p>
       </Footer>
     </StyledBookingDataBox>
   );

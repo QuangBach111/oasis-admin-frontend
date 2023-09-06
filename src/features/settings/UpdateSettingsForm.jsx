@@ -13,13 +13,13 @@ import { useState } from 'react';
 
 
 function UpdateSettingsForm() {
-  const { isLoading, setting } = useSettings();
+  const { isSetting, setting } = useSettings();
 
 
   const { editSetting } = useEditSetting();
 
 
-  if (isLoading) return <Spinner />;
+  if (isSetting) return <Spinner />;
 
   function handleUpdate(e) {
     const { name, value } = e.target;

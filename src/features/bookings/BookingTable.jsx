@@ -2,13 +2,13 @@
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
-import { useBooking } from "./useBooking";
+import { useBookings } from "./useBookings";
 import Spinner from "../../ui/Spinner";
 import Empty from "../../ui/Empty";
 // import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
-  const { data, isLoading } = useBooking();
+  const { data, isLoading } = useBookings();
   console.log('data', data);
 
   if (isLoading) return <Spinner />;

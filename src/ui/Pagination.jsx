@@ -1,3 +1,8 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import { useSearchParams } from "react-router-dom";
+
+import { HiChevronDoubleLeft, HiChevronDoubleRight } from "react-icons/hi2";
 import styled from "styled-components";
 
 const StyledPagination = styled.div`
@@ -55,3 +60,38 @@ const PaginationButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+const PAGE_SIZE = 10;
+
+function Pagination({ pageNo, totalPages, totalElements }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
+
+  const pageCount = Math.ceil(pageNo / PAGE_SIZE);
+
+  function nextPage() {
+
+  }
+  function previousPage() {
+
+  }
+  return (
+    <StyledPagination>
+      <P>
+        Showing <span>1</span> to <span>10</span> of <span>{totalElements}</span> results
+      </P>
+
+      <Buttons>
+        <PaginationButton onClick={nextPage}>
+          <HiChevronDoubleLeft /> <span>Previous</span>
+        </PaginationButton>
+
+        <PaginationButton onClick={previousPage}>
+          <span>Next</span> <HiChevronDoubleRight />
+        </PaginationButton>
+      </Buttons>
+    </StyledPagination>
+  );
+}
+
+export default Pagination;

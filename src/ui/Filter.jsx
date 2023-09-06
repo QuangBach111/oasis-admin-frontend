@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import { useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
-import { useBooking } from "../features/bookings/useBooking";
+import { useBookings } from "../features/bookings/useBookings";
 
 const StyledFilter = styled.div`
   border: 1px solid var(--color-grey-100);
