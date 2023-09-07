@@ -58,7 +58,7 @@ function CheckinBooking() {
       id: bookingId,
       status: "CHECKIN",
       isPaid: confirmPaid,
-      hasBreakfast: addBreakfast,
+      hasBreakfast: hasBreakfast ? hasBreakfast : addBreakfast,
       extrasPrice: optionalBreakfastPrice,
       totalPrice: totalPrice + optionalBreakfastPrice
     });
