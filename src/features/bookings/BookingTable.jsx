@@ -5,7 +5,7 @@ import Menus from "../../ui/Menus";
 import { useBookings } from "./useBookings";
 import Spinner from "../../ui/Spinner";
 import Empty from "../../ui/Empty";
-// import Pagination from "../../ui/Pagination";
+import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
   const { data, isLoading } = useBookings();
@@ -17,9 +17,9 @@ function BookingTable() {
 
   const {
     content: bookings,
-    // totalElements,
-    // pageable: { pageNumber },
-    // totalPages
+    totalElements,
+    pageable: { pageNumber, pageSize },
+    totalPages
   } = data.data;
 
   return (
@@ -41,7 +41,12 @@ function BookingTable() {
           )}
         />
         <Table.Footer>
-          {/* <Pagination pageNo={pageNumber} totalPage={totalPages} totalElements={totalElements} /> */}
+          <Pagination
+            totalElements={totalElements}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            totalPages={totalPages}
+          />
         </Table.Footer>
       </Table>
     </Menus>

@@ -2,7 +2,7 @@
 import { clientAxios } from "./clientAxios";
 
 
-export async function getBookings({ filter, sortBy }) {
+export async function getBookings({ filter, sortBy, pageNo }) {
   const requestParams = {};
   if (filter) {
     requestParams.filter_field = filter.field;
@@ -13,6 +13,9 @@ export async function getBookings({ filter, sortBy }) {
     requestParams.sortBy_field = sortBy.field;
     requestParams.sortBy_direction = sortBy.direction;
   }
+
+  requestParams.pageNo = pageNo ? pageNo : 1;
+
   try {
     const { data } = await clientAxios.get("/bookings", {
       params: requestParams
