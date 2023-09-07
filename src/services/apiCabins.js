@@ -1,10 +1,11 @@
 import { clientAxios } from "./clientAxios";
 
-export async function getCabins() {
+export async function getCabins({ pageNo, filter, sortBy }) {
   const { data, error } = await clientAxios.get("/cabins", {
     params: {
-      pageNo: 1,
-      pageSize: 10
+      pageNo: pageNo,
+      filter: filter,
+      sortBy: sortBy
     }
 
   });
