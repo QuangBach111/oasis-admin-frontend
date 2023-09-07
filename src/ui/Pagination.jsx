@@ -4,7 +4,8 @@ import { useSearchParams } from "react-router-dom";
 
 import { HiChevronDoubleLeft, HiChevronDoubleRight } from "react-icons/hi2";
 import styled from "styled-components";
-
+import { useState } from "react";
+import PaginationPage from './PaginationPage';
 const StyledPagination = styled.div`
   width: 100%;
   display: flex;
@@ -61,32 +62,50 @@ const PaginationButton = styled.button`
   }
 `;
 
-const PAGE_SIZE = 10;
-
-function Pagination({ pageNo, totalPages, totalElements }) {
+function Pagination({ totalElements, pageNumber, pageSize, totalPages, onClick }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
-
-  const pageCount = Math.ceil(pageNo / PAGE_SIZE);
+  const [currentPage, setCurrentPage] = useState(pageNumber + 1);
 
   function nextPage() {
+    if (currentPage === totalPages) return;
 
+    searchParams.set("page", currentPage + 1);
+    setSearchParams(searchParams);
+    setCurrentPage(currentPage + 1);
   }
-  function previousPage() {
 
+  function prevPage() {
+    if (currentPage === 1) return;
+
+    searchParams.set("page", currentPage - 1);
+    setSearchParams(searchParams);
+    setCurrentPage(currentPage - 1);
   }
+
+  function handleClickPageButton(pageNumber) {
+    searchParams.set("page", pageNumber);
+    setSearchParams(searchParams);
+    setCurrentPage(searchParams);
+  }
+
   return (
     <StyledPagination>
       <P>
-        Showing <span>1</span> to <span>10</span> of <span>{totalElements}</span> results
+        Showing <span>{(currentPage - 1) * pageSize + 1}</span> to <span>{currentPage === totalPages ? totalElements : currentPage * pageSize}</span> of <span>{totalElements}</span> results
       </P>
 
       <Buttons>
-        <PaginationButton onClick={nextPage}>
+        <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
           <HiChevronDoubleLeft /> <span>Previous</span>
         </PaginationButton>
 
-        <PaginationButton onClick={previousPage}>
+        <PaginationPage
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onClick={handleClickPageButton}
+        />
+
+        <PaginationButton onClick={nextPage} disabled={currentPage === totalPages}>
           <span>Next</span> <HiChevronDoubleRight />
         </PaginationButton>
       </Buttons>
