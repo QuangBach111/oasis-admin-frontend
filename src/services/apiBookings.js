@@ -1,4 +1,5 @@
 // import { getToday } from "../utils/helpers";
+import { getToday } from "../utils/helpers";
 import { clientAxios } from "./clientAxios";
 
 
@@ -56,5 +57,35 @@ export async function deleteBookingApi(bookingId) {
     return data;
   } catch (error) {
     throw new Error("Delete is failed!");
+  }
+}
+
+export async function getBookingsAfterDate(date) {
+  try {
+    const { data } = await clientAxios.get("/bookings/date", {
+      params: {
+        date: date,
+        currentDate: getToday()
+      }
+    });
+    return data;
+
+  } catch (error) {
+    throw new Error("Something wrong!");
+  }
+}
+
+export async function getStayAfterDate(date) {
+  try {
+    const { data } = await clientAxios.get("/bookings/stay", {
+      params: {
+        date: date,
+        currentDate: getToday()
+      }
+    });
+    return data;
+
+  } catch (error) {
+    throw new Error("Something wrong!");
   }
 }

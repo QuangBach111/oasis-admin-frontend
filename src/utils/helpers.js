@@ -29,5 +29,4 @@ export const formatCurrency = (value) =>
     value
   );
 
-export const createDate = (dateArr) =>
-  new Date(dateArr.at(0), dateArr.at(1) - 1, dateArr.at(2), dateArr?.at(3), dateArr?.at(4), dateArr?.at(5));
+export const createDate = (isoString) => new Date(isoString);

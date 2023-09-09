@@ -58,6 +58,9 @@ function BookingRow({
     cabin: { name: cabinName },
   },
 }) {
+  console.log('startDate', startDate);
+  console.log('endDate', endDate);
+  console.log(new Date());
   const navigate = useNavigate();
 
   const statusToTagName = {
