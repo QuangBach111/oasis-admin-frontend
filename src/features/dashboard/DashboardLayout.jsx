@@ -15,10 +15,21 @@ const StyledDashboardLayout = styled.div`
 
 
 function DashboardLayout() {
+  // Recent bookings
   const { bookings, isLoading: isBookingsLoading, numDays } = useRecentBookings();
+
+  // Recent confirm bookings
   const { stays, confirmedStays, isLoading: isStaysLoading } = useRecentStays();
-  const { data: { totalElements: cabinCounts }, isCabinsLoading } = useCabins();
+
+  // Cabins
+  const { data, isCabinsLoading } = useCabins();
+
+  // Loading
   if (isBookingsLoading || isStaysLoading || isCabinsLoading) return <Spinner />;
+
+  // Total cabin element
+  const { totalElements: cabinCounts } = data;
+
   return (
     <StyledDashboardLayout>
       <Stats bookings={bookings} confirmStays={confirmedStays} numDays={numDays} cabinCounts={cabinCounts} />
