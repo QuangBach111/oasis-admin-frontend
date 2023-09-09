@@ -21,6 +21,7 @@ function BookingTable() {
     pageable: { pageNumber, pageSize },
     totalPages
   } = data.data;
+  console.log('bookings', bookings);
 
   return (
     <Menus>

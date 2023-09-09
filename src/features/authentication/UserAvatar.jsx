@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import styled from "styled-components";
-
+import { useUser } from "./useUser";
 const StyledUserAvatar = styled.div`
   display: flex;
   gap: 1.2rem;
@@ -19,3 +20,16 @@ const Avatar = styled.img`
   border-radius: 50%;
   outline: 2px solid var(--color-grey-100);
 `;
+
+function UserAvatar() {
+  const { user } = useUser();
+  const { avatarUrl, fullName } = user;
+  return (
+    <StyledUserAvatar>
+      <Avatar src={avatarUrl} />
+      <span>{fullName}</span>
+    </StyledUserAvatar>
+  );
+}
+
+export default UserAvatar;
