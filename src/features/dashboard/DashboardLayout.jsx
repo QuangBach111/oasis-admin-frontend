@@ -6,6 +6,10 @@ import { useRecentBookings } from "./useRecentBookings";
 import { useRecentStays } from "./useRecentStays";
 import { useCabins } from "../cabins/useCabins";
 import Stats from "./Stats";
+import SalesChart from "./SalesChart";
+import DurationChart from "./DurationChart";
+import TodayActivity from "../check-in-out/TodayActivity";
+
 const StyledDashboardLayout = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -24,20 +28,28 @@ function DashboardLayout() {
   // Cabins
   const { data, isCabinsLoading } = useCabins();
 
+
   // Loading
   if (isBookingsLoading || isStaysLoading || isCabinsLoading) return <Spinner />;
-
   // Total cabin element
   const { totalElements: cabinCounts } = data;
+
 
   return (
     <StyledDashboardLayout>
       <Stats bookings={bookings} confirmStays={confirmedStays} numDays={numDays} cabinCounts={cabinCounts} />
-      <div>Statistics</div>
-      <div>Today  activity</div>
-      <div>Chart stay duration</div>
-      <div>Chart sales</div>
-    </StyledDashboardLayout>
+      <TodayActivity />
+      <DurationChart confirmedStays={confirmedStays} />
+
+      <div
+        style={{
+          gridColumnStart: 1,
+          gridColumnEnd: 5
+        }}>
+        <SalesChart bookings={bookings} numDays={numDays} />
+      </div>
+
+    </StyledDashboardLayout >
   );
 }
 

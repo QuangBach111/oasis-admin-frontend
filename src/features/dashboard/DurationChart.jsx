@@ -1,4 +1,8 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import styled from "styled-components";
+import Heading from "../../ui/Heading";
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 const ChartBox = styled.div`
   /* Box */
@@ -64,7 +68,7 @@ const startDataLight = [
 const startDataDark = [
   {
     duration: "1 night",
-    value: 0,
+    value: 20,
     color: "#b91c1c",
   },
   {
@@ -130,3 +134,45 @@ function prepareData(startData, stays) {
 
   return data;
 }
+
+
+function DurationChart({ confirmedStays }) {
+  const data = prepareData(startDataLight, confirmedStays);
+  return (
+    <ChartBox>
+      <Heading as="h2">Stay duration summary</Heading>
+      <ResponsiveContainer>
+        <PieChart>
+          <Pie
+            data={data}
+            nameKey="duration"
+            dataKey="value"
+            innerRadius={80}
+            outerRadius={110}
+            cx="40%"
+            cy="50%"
+            paddingAngle={3}
+          >
+            {startDataDark.map(entry => (
+              <Cell
+                fill={entry.color}
+                stroke={entry.color}
+                key={entry.duration}
+              />
+            ))}
+          </Pie>
+          <Legend
+            verticalAlign="middle"
+            align="right"
+            width="30%"
+            layout="vertical"
+            iconSize={15}
+            iconType="circle"
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartBox>
+  );
+}
+
+export default DurationChart;

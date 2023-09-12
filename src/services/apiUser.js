@@ -13,3 +13,14 @@ export async function getCurrentUser() {
   }
 
 }
+
+export async function updateUser(user) {
+  try {
+    const { data } = await clientAxios.put("/users", user);
+
+    return data;
+  } catch (error) {
+    throw new Error("Expired Login!");
+  }
+
+}

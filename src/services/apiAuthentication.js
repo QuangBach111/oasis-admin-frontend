@@ -17,3 +17,14 @@ export async function doLogout() {
     throw new Error("Email or password is not corrected!");
   }
 }
+
+export async function doRegister(register) {
+  console.log('register', register);
+  try {
+    const { data } = await clientAxios.post("/auth/register", register);
+
+    return data;
+  } catch (error) {
+    throw new Error("Email is already exists!");
+  }
+}
