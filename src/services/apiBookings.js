@@ -76,11 +76,13 @@ export async function getBookingsAfterDate(date) {
 }
 
 export async function getStayAfterDate(date) {
+  console.log('date', date);
+
   try {
     const { data } = await clientAxios.get("/bookings/stay", {
       params: {
         date: date,
-        currentDate: getToday()
+        currentDate: getToday({ end: true })
       }
     });
     return data;

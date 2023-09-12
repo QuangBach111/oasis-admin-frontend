@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 
 import Button from "../../ui/Button";
@@ -7,21 +8,30 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 
 import { useUser } from "./useUser";
+import { useUpdateUser } from "./useUpdateUser";
 
 function UpdateUserDataForm() {
+
   // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
   const {
     user: {
       email,
-      user_metadata: { fullName: currentFullName },
+      fullName: currentFullName
     },
   } = useUser();
-
+  const { updateUser, isUpdating } = useUpdateUser();
   const [fullName, setFullName] = useState(currentFullName);
   const [avatar, setAvatar] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("fullName", fullName);
+    formData.append("avatar", avatar ? avatar : "");
+
+
+    updateUser(formData);
   }
 
   return (
@@ -40,7 +50,7 @@ function UpdateUserDataForm() {
       <FormRow label="Avatar image">
         <FileInput
           id="avatar"
-          accept="image/*"
+
           onChange={(e) => setAvatar(e.target.files[0])}
         />
       </FormRow>
